@@ -1,3 +1,5 @@
+import html
+
 import streamlit as st
 
 from playlist_logic import (
@@ -225,9 +227,21 @@ def profile_sidebar():
 
 
 def add_song_sidebar():
-    """Render the Add Song controls in the sidebar."""
+    """Render the Add Song controls — manual entry or agent-driven auto-classify."""
     st.sidebar.header("Add a song")
 
+    mode = st.sidebar.radio(
+        "Mode",
+        options=["Manual entry", "Auto-classify from lyrics"],
+        key="add_song_mode",
+    )
+    if mode == "Manual entry":
+        _manual_entry_sidebar()
+    else:
+        _auto_classify_sidebar()
+
+
+def _manual_entry_sidebar():
     title = st.sidebar.text_input("Title")
     artist = st.sidebar.text_input("Artist")
     genre = st.sidebar.selectbox(
@@ -253,6 +267,57 @@ def add_song_sidebar():
             all_songs = st.session_state.songs[:]
             all_songs.append(normalized)
             st.session_state.songs = all_songs
+
+
+def _auto_classify_sidebar():
+    st.sidebar.caption(
+        "Enter a song and artist. The agent fetches lyrics, retrieves similar "
+        "mood examples, and asks Gemini to classify — then adds the result "
+        "with confidence and reasoning."
+    )
+    title = st.sidebar.text_input("Title", key="auto_title")
+    artist = st.sidebar.text_input("Artist", key="auto_artist")
+
+    if not st.sidebar.button("Analyze lyrics"):
+        return
+
+    if not title.strip() or not artist.strip():
+        st.sidebar.warning("Title and artist are both required.")
+        return
+
+    with st.spinner(f"Analyzing lyrics for {title} by {artist}..."):
+        try:
+            from agent import classify_from_title_artist
+            enriched = classify_from_title_artist(title.strip(), artist.strip())
+        except Exception as exc:
+            st.error(f"Lyrics analysis failed: {exc}")
+            return
+
+    raw: Song = {
+        "title": enriched["title"],
+        "artist": enriched["artist"],
+        "genre": "other",
+        "energy": int(enriched["energy"]),
+        "tags": list(enriched["tags"]),
+        "acoustic": bool(enriched["acoustic"]),
+        "confidence": float(enriched["confidence"]),
+        "reasoning": enriched["reasoning"],
+        "mood_hint": enriched["mood_hint"],
+    }
+    normalized = normalize_song(raw)
+    all_songs = st.session_state.songs[:]
+    all_songs.append(normalized)
+    st.session_state.songs = all_songs
+
+    st.sidebar.success(
+        f"Added: **{enriched['title']}** — mood_hint `{enriched['mood_hint']}` "
+        f"(confidence {enriched['confidence']:.2f})"
+    )
+    lyrics_source = enriched["sources"].get("lyrics_source")
+    if lyrics_source == "fallback":
+        st.sidebar.info("Used offline fallback lyrics.")
+    elif lyrics_source == "none":
+        st.sidebar.warning("No lyrics found; classification defaulted to Mixed.")
 
 
 def playlist_tabs(playlists):
@@ -286,11 +351,37 @@ def render_playlist(label, songs):
     for song in filtered:
         mood = song.get("mood", "?")
         tags = ", ".join(song.get("tags", []))
-        st.write(
-            f"- **{song['title']}** by {song['artist']} "
-            f"(genre {song['genre']}, energy {song['energy']}, mood {mood}) "
+        mood_hint = song.get("mood_hint")
+        mood_str = f"{mood} / hint: {mood_hint}" if mood_hint and mood_hint != mood else mood
+        line = (
+            f"**{song['title']}** by {song['artist']} "
+            f"(genre {song['genre']}, energy {song['energy']}, mood {mood_str}) "
             f"[{tags}]"
         )
+        if "confidence" in song:
+            st.markdown(
+                f"- {_confidence_badge(song)} {line}",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(f"- {line}")
+
+
+def _confidence_badge(song):
+    """Return an inline HTML span: colored dot + score, with reasoning as hover tooltip."""
+    conf = float(song.get("confidence", 0.0))
+    if conf >= 0.8:
+        color = "#22c55e"
+    elif conf >= 0.6:
+        color = "#f59e0b"
+    else:
+        color = "#ef4444"
+    reasoning = " ".join(str(song.get("reasoning", "")).split())[:400]
+    tooltip = html.escape(reasoning) if reasoning else "No reasoning available."
+    return (
+        f'<span title="{tooltip}" style="color:{color};font-weight:600;">'
+        f"● {conf:.2f}</span>"
+    )
 
 
 def lucky_section(playlists):

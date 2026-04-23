@@ -32,7 +32,12 @@ def normalize_genre(genre: str) -> str:
 
 
 def normalize_song(raw: Song) -> Song:
-    """Return a normalized song dict with expected keys."""
+    """Return a normalized song dict with expected keys.
+
+    Optional agent-provided fields (acoustic, confidence, reasoning, mood_hint)
+    are preserved only when present in `raw`, so manually-entered songs stay
+    shaped the same as before and don't grow empty badge state.
+    """
     title = normalize_title(str(raw.get("title", "")))
     artist = normalize_artist(str(raw.get("artist", "")))
     genre = normalize_genre(str(raw.get("genre", "")))
@@ -48,13 +53,27 @@ def normalize_song(raw: Song) -> Song:
     if isinstance(tags, str):
         tags = [tags]
 
-    return {
+    normalized: Song = {
         "title": title,
         "artist": artist,
         "genre": genre,
         "energy": energy,
         "tags": tags,
     }
+
+    if "acoustic" in raw:
+        normalized["acoustic"] = bool(raw["acoustic"])
+    if "confidence" in raw:
+        try:
+            normalized["confidence"] = float(raw["confidence"])
+        except (TypeError, ValueError):
+            pass
+    if "reasoning" in raw:
+        normalized["reasoning"] = str(raw["reasoning"])
+    if "mood_hint" in raw:
+        normalized["mood_hint"] = str(raw["mood_hint"])
+
+    return normalized
 
 
 def classify_song(song: Song, profile: Dict[str, object]) -> str:

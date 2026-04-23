@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "description": "Mood taxonomy used by rag_categories.py for few-shot retrieval and by agent.py for classification. Example snippets are original handwritten text chosen to evoke each mood without reproducing copyrighted lyrics.",
+  "moods": [
+    {
+      "name": "Hype",
+      "description": "High-energy, adrenaline-forward tracks that push the listener to move, shout, or go harder.",
+      "signals": {
+        "keywords": ["go", "run", "now", "turn up", "fire", "light it up", "loud", "jump", "win", "alive", "tonight", "engine"],
+        "instrumentation": ["driving drums", "distorted synths", "808s", "big brass stabs", "four-on-the-floor kick"],
+        "energy_range": [8, 10]
+      },
+      "examples": [
+        "Put your hands up, we don't stop 'til the sun comes back\nEngine running hot, foot on the pedal, no looking back\nLights up in my eyes, I was born for the flash",
+        "Run it up, run it up, keep the bass on the floor\nEvery bone in my body says go go go\nTonight's the kind of night we've been waiting for",
+        "Pulse is pounding, heart's a hammer, I can't slow down\nStadium roaring, feet off the ground\nWe ride the wave 'til the city shuts down",
+        "Crank it up, let the neighbors hear it, shake the walls\nNo brakes, no maps, we just answer the call\nFull speed, full send, we don't fall"
+      ]
+    },
+    {
+      "name": "Chill",
+      "description": "Laid-back, low-tempo grooves that feel warm, spacious, and easy to live inside.",
+      "signals": {
+        "keywords": ["slow", "easy", "drift", "smooth", "breeze", "sunday", "window down", "float", "golden hour", "quiet"],
+        "instrumentation": ["soft electric piano", "brushed drums", "mellow bass", "warm pads", "lo-fi texture"],
+        "energy_range": [2, 5]
+      },
+      "examples": [
+        "Sunday morning, coffee steaming, nowhere to be\nLight leaks through the curtains slow, the world's on mute\nNothing's heavy, nothing's loud, just us and the tune",
+        "Window down, one hand out, the highway hums along\nClouds drift west, we drift with 'em, ain't a care in the song\nTime moves gentle on a day this long",
+        "Couch of yours, record spinning soft and warm\nHer laugh falls easy, mine falls after hers\nEvening leans in slow, no rush, no storm",
+        "Golden hour on the rooftop, wind plays with her hair\nCity breathing quiet below, we don't go anywhere\nJust a slow groove carrying nothing but the air"
+      ]
+    },
+    {
+      "name": "Sad",
+      "description": "Melancholy, aching, introspective tracks centered on loss, longing, or loneliness.",
+      "signals": {
+        "keywords": ["gone", "alone", "cry", "miss", "broken", "empty", "rain", "ghost", "memory", "wish", "cold"],
+        "instrumentation": ["solo piano", "strings", "minor chords", "reverb-heavy vocals", "sparse acoustic guitar"],
+        "energy_range": [1, 4]
+      },
+      "examples": [
+        "Your side of the bed still holds the shape of you\nI reach out at night and find the room too wide\nMorning comes and the silence won't move",
+        "I kept every letter, I kept every song\nBut I couldn't keep you, and I don't know what I did wrong\nThe rain won't stop, and neither will I",
+        "Empty glass, empty hours, empty half of a bed\nI play our old record so I can hear you again\nEven ghosts stop visiting eventually",
+        "I thought love was supposed to last longer than this\nNow I drive past your street and pretend I forgot where you live\nEverything reminds me, everything hurts"
+      ]
+    },
+    {
+      "name": "Angry",
+      "description": "Aggressive, confrontational, defiant tracks driven by fury, betrayal, or pushback.",
+      "signals": {
+        "keywords": ["hate", "burn", "break", "liar", "war", "fight", "blood", "done", "swear", "enough", "scream"],
+        "instrumentation": ["distorted guitars", "double-kick drums", "screamed or gritted vocals", "aggressive synth stabs", "heavy bass"],
+        "energy_range": [7, 10]
+      },
+      "examples": [
+        "I bit my tongue 'til it bled for you, now I'm done pretending\nYou lit the match, don't act surprised at where this is ending\nEverything you touched, I'm burning",
+        "You said my name like it was a weapon, now watch me use mine\nYou built a throne out of everyone you broke to climb\nThe whole thing's coming down tonight",
+        "I'm not the kid you walked on, not the voice you silenced\nI'm the answer you never wanted, loud and violent\nEvery wall you built is coming down",
+        "You can keep your sorry, keep your soft apology\nI don't want peace, I want you to remember me\nEvery scar has a name and it's yours"
+      ]
+    },
+    {
+      "name": "Romantic",
+      "description": "Warm, devoted, intimate tracks about love, closeness, and wanting someone specifically.",
+      "signals": {
+        "keywords": ["you", "love", "hold", "forever", "stay", "home", "heart", "close", "kiss", "always", "slow dance"],
+        "instrumentation": ["strings", "gentle acoustic guitar", "soft piano", "intimate close-mic vocals", "slow tempos"],
+        "energy_range": [3, 6]
+      },
+      "examples": [
+        "Every song I've ever loved was just rehearsal for you\nI didn't know a heart could feel this full and this true\nStay, just stay, the rest will figure itself out",
+        "The way you laugh in the morning could rebuild a man\nI'll spend the rest of my life just learning who you are\nHold my hand like you mean it — you do, I know you do",
+        "I'd choose you in any life, in any year, in any room\nYou're the only reason I trust anything good can be true\nCome a little closer, let the world fall away",
+        "Slow dance in the kitchen, no music but the rain\nYour head against my chest, and I forget my own name\nHome isn't a place, it's the way you say mine"
+      ]
+    }
+  ]
+}

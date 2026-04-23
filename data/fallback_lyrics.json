@@ -1,0 +1,30 @@
+{
+  "_comment": "Offline fallback lyrics used when the Genius API is unreachable or returns no match. Entries are public-domain/traditional songs to avoid reproducing copyrighted material. Match is case-insensitive on (title, artist).",
+  "songs": [
+    {
+      "title": "Amazing Grace",
+      "artist": "Traditional",
+      "lyrics": "Amazing grace, how sweet the sound,\nThat saved a wretch like me.\nI once was lost, but now am found,\nWas blind, but now I see.\n\nT'was grace that taught my heart to fear,\nAnd grace my fears relieved.\nHow precious did that grace appear,\nThe hour I first believed.\n\nThrough many dangers, toils and snares,\nI have already come.\n'Tis grace has brought me safe thus far,\nAnd grace will lead me home."
+    },
+    {
+      "title": "House of the Rising Sun",
+      "artist": "Traditional",
+      "lyrics": "There is a house in New Orleans,\nThey call the Rising Sun.\nAnd it's been the ruin of many a poor boy,\nAnd God, I know I'm one.\n\nMy mother was a tailor,\nShe sewed my new blue jeans.\nMy father was a gamblin' man,\nDown in New Orleans.\n\nOh mother, tell your children,\nNot to do what I have done.\nSpend your lives in sin and misery,\nIn the House of the Rising Sun."
+    },
+    {
+      "title": "Scarborough Fair",
+      "artist": "Traditional",
+      "lyrics": "Are you going to Scarborough Fair?\nParsley, sage, rosemary, and thyme.\nRemember me to one who lives there,\nFor she once was a true love of mine.\n\nTell her to make me a cambric shirt,\nParsley, sage, rosemary, and thyme.\nWithout any seam nor needlework,\nThen she shall be a true love of mine.\n\nTell her to find me an acre of land,\nParsley, sage, rosemary, and thyme.\nBetween the salt water and the sea strand,\nThen she shall be a true love of mine."
+    },
+    {
+      "title": "When the Saints Go Marching In",
+      "artist": "Traditional",
+      "lyrics": "Oh when the saints go marching in,\nOh when the saints go marching in,\nLord how I want to be in that number,\nWhen the saints go marching in.\n\nAnd when the sun refuse to shine,\nAnd when the sun refuse to shine,\nLord how I want to be in that number,\nWhen the sun refuse to shine.\n\nAnd when the trumpet sounds its call,\nAnd when the trumpet sounds its call,\nLord how I want to be in that number,\nWhen the trumpet sounds its call."
+    },
+    {
+      "title": "Danny Boy",
+      "artist": "Traditional",
+      "lyrics": "Oh Danny boy, the pipes, the pipes are calling,\nFrom glen to glen, and down the mountain side.\nThe summer's gone, and all the roses falling,\n'Tis you, 'tis you must go and I must bide.\n\nBut come ye back when summer's in the meadow,\nOr when the valley's hushed and white with snow.\n'Tis I'll be here in sunshine or in shadow,\nOh Danny boy, oh Danny boy, I love you so."
+    }
+  ]
+}

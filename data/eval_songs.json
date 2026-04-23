@@ -1,0 +1,15 @@
+{
+  "_comment": "Hand-labeled eval set. 10 songs, 2 per mood, covering all five moods in categories.json. Labels reflect the annotator's reading of the dominant mood; some songs genuinely straddle moods — those are the interesting ones. Run with `python eval.py`.",
+  "songs": [
+    {"title": "Thunderstruck", "artist": "AC/DC", "expected_mood": "Hype"},
+    {"title": "Eye of the Tiger", "artist": "Survivor", "expected_mood": "Hype"},
+    {"title": "Banana Pancakes", "artist": "Jack Johnson", "expected_mood": "Chill"},
+    {"title": "Put Your Records On", "artist": "Corinne Bailey Rae", "expected_mood": "Chill"},
+    {"title": "Fix You", "artist": "Coldplay", "expected_mood": "Sad"},
+    {"title": "Someone Like You", "artist": "Adele", "expected_mood": "Sad"},
+    {"title": "Killing in the Name", "artist": "Rage Against the Machine", "expected_mood": "Angry"},
+    {"title": "Break Stuff", "artist": "Limp Bizkit", "expected_mood": "Angry"},
+    {"title": "All of Me", "artist": "John Legend", "expected_mood": "Romantic"},
+    {"title": "Can't Help Falling in Love", "artist": "Elvis Presley", "expected_mood": "Romantic"}
+  ]
+}

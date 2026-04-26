@@ -45,8 +45,8 @@ _genius = Genius(
     skip_non_songs=True,
     excluded_terms=["(Remix)", "(Live)"],
     retries=1,
-    verbose=False,
 )
+_genius.verbose = False
 
 
 def fetch_lyrics(title: str, artist: str) -> Optional[str]:

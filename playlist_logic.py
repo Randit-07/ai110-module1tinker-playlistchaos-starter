@@ -100,19 +100,23 @@ def classify_song(song: Song, profile: Dict[str, object]) -> str:
 
 
 def build_playlists(songs: List[Song], profile: Dict[str, object]) -> PlaylistMap:
-    """Group songs into playlists based on mood and profile."""
-    playlists: PlaylistMap = {
-        "Hype": [],
-        "Chill": [],
-        "Mixed": [],
-    }
+    """Group songs into playlists by mood.
 
+    For agent-classified songs the fine-grained `mood_hint` (Sad/Angry/Romantic/
+    Reflective/Hopeful/Playful/...) takes priority so they appear in their own
+    tab. Manual entries have no `mood_hint`, so they fall back to the existing
+    rule-based `classify_song` buckets (Hype/Chill/Mixed).
+    """
+    playlists: PlaylistMap = {}
     for song in songs:
         normalized = normalize_song(song)
-        mood = classify_song(normalized, profile)
+        hint = normalized.get("mood_hint")
+        if isinstance(hint, str) and hint.strip():
+            mood = hint.strip()
+        else:
+            mood = classify_song(normalized, profile)
         normalized["mood"] = mood
-        playlists[mood].append(normalized)
-
+        playlists.setdefault(mood, []).append(normalized)
     return playlists
 
 

@@ -19,16 +19,18 @@ import time
 from pathlib import Path
 from typing import List
 
-import google.generativeai as genai
 import numpy as np
 from dotenv import load_dotenv
+from google import genai
+from google.genai import types
 
 load_dotenv()
 
 logger = logging.getLogger("playlistchaos.rag")
 
-_EMBED_MODEL = "models/text-embedding-004"
-_TASK_TYPE = "semantic_similarity"
+# Single embedding model — set PLAYLISTCHAOS_EMBED_MODEL in .env to override.
+_DEFAULT_EMBED_MODEL = "models/gemini-embedding-2"
+_TASK_TYPE = "SEMANTIC_SIMILARITY"
 _ROOT = Path(__file__).parent
 _CATEGORIES_PATH = _ROOT / "categories.json"
 _CACHE_DIR = _ROOT / ".cache"
@@ -46,7 +48,20 @@ def _load_api_key() -> str:
     return key
 
 
-genai.configure(api_key=_load_api_key())
+_client = genai.Client(api_key=_load_api_key())
+
+
+def _resolve_embed_model() -> str:
+    override = (os.getenv("PLAYLISTCHAOS_EMBED_MODEL") or "").strip()
+    chosen = override or _DEFAULT_EMBED_MODEL
+    logger.info(
+        "rag.embed_model chosen=%s source=%s",
+        chosen, "env" if override else "default",
+    )
+    return chosen
+
+
+_EMBED_MODEL = _resolve_embed_model()
 
 
 def _read_categories() -> tuple[list[str], list[str], bytes]:
@@ -73,21 +88,21 @@ def _cache_key(raw: bytes) -> str:
 
 
 def _embed_batch(texts: list[str]) -> np.ndarray:
-    result = genai.embed_content(
+    result = _client.models.embed_content(
         model=_EMBED_MODEL,
-        content=texts,
-        task_type=_TASK_TYPE,
+        contents=texts,
+        config=types.EmbedContentConfig(task_type=_TASK_TYPE),
     )
-    return np.asarray(result["embedding"], dtype=np.float32)
+    return np.asarray([e.values for e in result.embeddings], dtype=np.float32)
 
 
 def _embed_one(text: str) -> np.ndarray:
-    result = genai.embed_content(
+    result = _client.models.embed_content(
         model=_EMBED_MODEL,
-        content=text,
-        task_type=_TASK_TYPE,
+        contents=text,
+        config=types.EmbedContentConfig(task_type=_TASK_TYPE),
     )
-    return np.asarray(result["embedding"], dtype=np.float32)
+    return np.asarray(result.embeddings[0].values, dtype=np.float32)
 
 
 def _load_or_build_index() -> tuple[np.ndarray, np.ndarray, np.ndarray]:

@@ -1,4 +1,6 @@
 import html
+import json
+from pathlib import Path
 
 import streamlit as st
 
@@ -320,16 +322,25 @@ def _auto_classify_sidebar():
         st.sidebar.warning("No lyrics found; classification defaulted to Mixed.")
 
 
+_CATEGORIES_PATH = Path(__file__).parent / "categories.json"
+
+
+@st.cache_data
+def _mood_tab_order():
+    """Tab order comes from categories.json — adding a mood there grows the UI."""
+    with _CATEGORIES_PATH.open(encoding="utf-8") as fh:
+        return [m["name"] for m in json.load(fh)["moods"]]
+
+
 def playlist_tabs(playlists):
-    """Render playlists in tabs."""
+    """Render one tab per mood from categories.json, plus optional Mixed."""
     include_mixed = st.session_state.profile.get("include_mixed", True)
 
-    tab_labels = ["Hype", "Chill"]
+    tab_labels = list(_mood_tab_order())
     if include_mixed:
         tab_labels.append("Mixed")
 
     tabs = st.tabs(tab_labels)
-
     for label, tab in zip(tab_labels, tabs):
         with tab:
             render_playlist(label, playlists.get(label, []))

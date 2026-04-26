@@ -13,10 +13,12 @@ import json
 import logging
 import os
 import time
+from pathlib import Path
 from typing import List, TypedDict
 
-import google.generativeai as genai
 from dotenv import load_dotenv
+from google import genai
+from google.genai import types
 
 import genius_tool
 import rag_categories
@@ -25,12 +27,31 @@ load_dotenv()
 
 logger = logging.getLogger("playlistchaos.agent")
 
-_MODEL_NAME = "gemini-2.0-flash"
+# LLM model is env-configurable so a 429/404 on one model can be swapped without
+# a code edit. Default is gemini-2.5-flash, which has free-tier quota in 2025+
+# regions where gemini-2.0-flash has been demoted to limit:0.
+_DEFAULT_MODEL_NAME = "gemini-2.5-flash"
+_MODEL_NAME = (os.getenv("PLAYLISTCHAOS_LLM_MODEL") or "").strip() or _DEFAULT_MODEL_NAME
+
 _MAX_LYRICS_CHARS = 1500
 _CONFIDENCE_THRESHOLD = 0.6
-_VALID_MOODS = {"Hype", "Chill", "Sad", "Angry", "Romantic", "Mixed"}
 _REQUIRED_KEYS = {"energy", "mood_hint", "tags", "acoustic", "confidence", "reasoning"}
 _PLACEHOLDERS = {"", "your_gemini_key_here", "changeme"}
+_CATEGORIES_PATH = Path(__file__).parent / "categories.json"
+
+
+def _load_valid_moods() -> set[str]:
+    """Read mood names from categories.json so adding a mood there auto-flows
+    into the agent's allowed set without a second code edit. 'Mixed' is always
+    allowed as the genuine-ambiguity / fallback label."""
+    with _CATEGORIES_PATH.open(encoding="utf-8") as fh:
+        data = json.load(fh)
+    moods = {m["name"] for m in data["moods"]}
+    moods.add("Mixed")
+    return moods
+
+
+_VALID_MOODS = _load_valid_moods()
 
 
 def _load_api_key() -> str:
@@ -43,8 +64,8 @@ def _load_api_key() -> str:
     return key
 
 
-genai.configure(api_key=_load_api_key())
-_model = genai.GenerativeModel(_MODEL_NAME)
+_client = genai.Client(api_key=_load_api_key())
+logger.info("agent.llm_model chosen=%s", _MODEL_NAME)
 
 
 class EnrichedSong(TypedDict):
@@ -124,13 +145,14 @@ def _build_prompt(
 def _call_llm(prompt: str, label: str) -> str:
     prompt_hash = _hash_prompt(prompt)
     logger.info(
-        "agent.llm request label=%s hash=%s chars=%d",
-        label, prompt_hash, len(prompt),
+        "agent.llm request label=%s model=%s hash=%s chars=%d",
+        label, _MODEL_NAME, prompt_hash, len(prompt),
     )
     started = time.monotonic()
-    response = _model.generate_content(
-        prompt,
-        generation_config=genai.GenerationConfig(
+    response = _client.models.generate_content(
+        model=_MODEL_NAME,
+        contents=prompt,
+        config=types.GenerateContentConfig(
             response_mime_type="application/json",
         ),
     )

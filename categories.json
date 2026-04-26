@@ -76,6 +76,51 @@
         "I'd choose you in any life, in any year, in any room\nYou're the only reason I trust anything good can be true\nCome a little closer, let the world fall away",
         "Slow dance in the kitchen, no music but the rain\nYour head against my chest, and I forget my own name\nHome isn't a place, it's the way you say mine"
       ]
+    },
+    {
+      "name": "Reflective",
+      "description": "Quiet, introspective tracks centered on thinking through something — wistful but not strictly sad.",
+      "signals": {
+        "keywords": ["thinking", "remember", "wonder", "looking back", "years", "windows", "silence", "old", "quiet", "meant"],
+        "instrumentation": ["solo piano", "fingerpicked guitar", "soft strings", "muted percussion", "low-end pads"],
+        "energy_range": [2, 4]
+      },
+      "examples": [
+        "I've been turning that night over in my head\nThe way the streetlight made the rain look slow\nSome things you don't fix, you just let them sit",
+        "Walked the same block I walked at twenty-three\nDifferent shoes, same questions, no answers yet\nTime isn't a teacher, it's just a long road",
+        "Older now, but the kid is still in here\nHe asks me sometimes what we've been doing\nI never quite know how to answer him",
+        "Sat in the parked car after the engine cooled\nThinking about choices like they were furniture\nWhat I keep, what I leave by the curb"
+      ]
+    },
+    {
+      "name": "Hopeful",
+      "description": "Uplifting, forward-looking tracks about possibility, healing, or starting over — without going full hype.",
+      "signals": {
+        "keywords": ["tomorrow", "morning", "rise", "begin", "new", "open", "shine", "lighter", "again", "forward"],
+        "instrumentation": ["warm pads", "gospel keys", "building drums", "anthemic harmonies", "swelling strings"],
+        "energy_range": [5, 8]
+      },
+      "examples": [
+        "Tomorrow is a door we haven't opened yet\nI packed light, I packed brave, I'm gonna find out\nThe morning is on its way and so are we",
+        "I survived the worst of me and there's still a song\nSun's coming up like it owes me something\nWatch me, watch me, watch me run",
+        "Rebuild day by day, brick by brick, breath by breath\nThe window I broke is the window I'll glaze\nI'm not who I was, and that's the whole point",
+        "Even the long winter eventually thaws\nEven the loudest doubt eventually quiets down\nHold on, hold on, the green is coming back"
+      ]
+    },
+    {
+      "name": "Playful",
+      "description": "Light, bouncy, quirky tracks that feel like a wink — fun without trying to be hype.",
+      "signals": {
+        "keywords": ["skip", "silly", "wink", "funny", "dance", "laugh", "doodle", "bounce", "trick", "wiggle"],
+        "instrumentation": ["pizzicato strings", "ukulele", "whistles", "handclaps", "snappy percussion"],
+        "energy_range": [4, 7]
+      },
+      "examples": [
+        "Skipping rocks across the morning, what's the rush\nWore my socks inside out just for the joke of it\nLife's a little goofy, and so are we",
+        "Kazoo solo at the wedding, who said no\nSnuck a dance move into the staff meeting\nWhy so serious, the world's a cartoon",
+        "Made up a song about my refrigerator\nIt's mostly about leftovers, but it has a hook\nDon't take yourself too seriously, take the bridge",
+        "Polka-dot socks, two scoops, second breakfast\nFound a quarter, called it a sign from the universe\nTuesday is a costume party if you let it"
+      ]
     }
   ]
 }

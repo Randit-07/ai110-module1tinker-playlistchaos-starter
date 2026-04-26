@@ -33,8 +33,16 @@ _BASELINE_PATH = _ROOT / "data" / "eval_baseline.json"
 _LOGS_DIR = _ROOT / "logs"
 
 ACCURACY_THRESHOLD = 0.6
-MOODS = ["Hype", "Chill", "Sad", "Angry", "Romantic"]
-ALL_PRED_COLS = MOODS + ["Mixed", "ERROR"]
+
+
+def _categories_moods() -> list[str]:
+    """Mood names from categories.json so new moods auto-flow into the matrix."""
+    with (_ROOT / "categories.json").open(encoding="utf-8") as fh:
+        return [m["name"] for m in json.load(fh)["moods"]]
+
+
+MOODS = ["Hype", "Chill", "Sad", "Angry", "Romantic"]  # expected labels in eval_songs.json
+ALL_PRED_COLS = _categories_moods() + ["Mixed", "ERROR"]
 
 
 def load_eval_set() -> list[dict]:

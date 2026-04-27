@@ -1,0 +1,35 @@
+# Secrets
+.env
+
+# Runtime
+logs/
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Media
+*.mov
+*.mp4
+
+#claude
+.claude/
+.claude-work/
+.gitignore
+# Claude skill working directories
+.claude-work/
+
+.logs

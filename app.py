@@ -1,8 +1,14 @@
 import html
 import json
+import logging
 from pathlib import Path
 
 import streamlit as st
+
+from logging_config import setup_logging
+
+setup_logging()
+logger = logging.getLogger("playlistchaos.app")
 
 from playlist_logic import (
     DEFAULT_PROFILE,
@@ -284,15 +290,20 @@ def _auto_classify_sidebar():
         return
 
     if not title.strip() or not artist.strip():
+        logger.info("auto_classify validation_fail title=%r artist=%r", title, artist)
         st.sidebar.warning("Title and artist are both required.")
         return
 
+    logger.info("auto_classify request title=%r artist=%r", title.strip(), artist.strip())
     with st.spinner(f"Analyzing lyrics for {title} by {artist}..."):
         try:
             from agent import classify_from_title_artist
             enriched = classify_from_title_artist(title.strip(), artist.strip())
-        except Exception as exc:
-            st.error(f"Lyrics analysis failed: {exc}")
+        except Exception:
+            logger.exception(
+                "auto_classify error title=%r artist=%r", title.strip(), artist.strip(),
+            )
+            st.error("Lyrics analysis failed — see logs/agent.log for details.")
             return
 
     raw: Song = {
@@ -311,11 +322,16 @@ def _auto_classify_sidebar():
     all_songs.append(normalized)
     st.session_state.songs = all_songs
 
+    lyrics_source = enriched["sources"].get("lyrics_source")
+    logger.info(
+        "auto_classify done title=%r artist=%r mood=%s confidence=%.2f lyrics_source=%s",
+        enriched["title"], enriched["artist"], enriched["mood_hint"],
+        enriched["confidence"], lyrics_source,
+    )
     st.sidebar.success(
         f"Added: **{enriched['title']}** — mood_hint `{enriched['mood_hint']}` "
         f"(confidence {enriched['confidence']:.2f})"
     )
-    lyrics_source = enriched["sources"].get("lyrics_source")
     if lyrics_source == "fallback":
         st.sidebar.info("Used offline fallback lyrics.")
     elif lyrics_source == "none":
@@ -399,9 +415,10 @@ def lucky_section(playlists):
     """Render the lucky pick controls and result."""
     st.header("Lucky pick")
 
+    mood_options = [m.lower() for m in _mood_tab_order()]
     mode = st.selectbox(
         "Pick from",
-        options=["any", "hype", "chill"],
+        options=["any", *mood_options],
         index=0,
     )
 

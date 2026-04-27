@@ -201,13 +201,22 @@ def lucky_pick(
     playlists: PlaylistMap,
     mode: str = "any",
 ) -> Optional[Song]:
-    """Pick a song from the playlists according to mode."""
-    if mode == "hype":
-        songs = playlists.get("Hype", [])
-    elif mode == "chill":
-        songs = playlists.get("Chill", [])
+    """Pick a song from the playlists according to mode.
+
+    `mode="any"` flattens every playlist (all moods). Otherwise the mode is
+    matched case-insensitively against the playlist keys, so any mood added to
+    categories.json — Sad, Angry, Romantic, Reflective, Hopeful, Playful, … —
+    works without a code edit here.
+    """
+    key = (mode or "").strip().lower()
+    if key in ("", "any"):
+        songs = [s for bucket in playlists.values() for s in bucket]
     else:
-        songs = playlists.get("Hype", []) + playlists.get("Chill", [])
+        match = next(
+            (k for k in playlists if k.lower() == key),
+            None,
+        )
+        songs = playlists.get(match, []) if match else []
 
     return random_choice_or_none(songs)
 
@@ -216,6 +225,8 @@ def random_choice_or_none(songs: List[Song]) -> Optional[Song]:
     """Return a random song or None."""
     import random
 
+    if not songs:
+        return None
     return random.choice(songs)
 
 

@@ -3,6 +3,10 @@
 A Streamlit playlist builder with an AI agent on the side. You can add songs manually as before, or enter just a **title + artist** and let the agent fetch the lyrics, retrieve similar mood examples via RAG, ask Gemini to classify the song, and self-critique low-confidence answers — all before the song lands in your playlist.
 
 ---
+## DEMO
+- Link(1) https://jumpshare.com/s/TZAPAll3SZ9hWktlG7yk
+- Link(2) https://streamable.com/s68t2c
+---
 
 ## 1. The original project (Modules 1–3)
 
